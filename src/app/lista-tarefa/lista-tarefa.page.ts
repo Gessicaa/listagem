@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ToastController, AlertController } from '@ionic/angular';
+import { Storage } from '@ionic/storage';
 
 @Component({
   selector: 'app-lista-tarefa',
@@ -9,46 +10,28 @@ import { ToastController, AlertController } from '@ionic/angular';
 export class ListaTarefaPage {
 
   title = "Lista de tarefas";
-  tarefas = [
-    {
-      "descricao": "Fazer cafe da manha",
-      "horario": "06:00"
-    },
+  tarefas = [];
 
-    {
-      "descricao": "Ir trabalhar",
-      "horario": "07:30"
-    },
-
-    {
-      "descricao": "Fazer almoço",
-      "horario": "12:30"
-    },
-
-    {
-      "descricao": "cuidar da casa",
-      "horario": "14:00"
-    },
-
-    {
-      "descricao": "estudar",
-      "horario": "15:30"
-    },
-
-    {
-      "descricao": "dormir",
-      "horario": "23:00"
-    },
-
-  ];
+  TAREFAS_KEY = 'tarefas'
 
   nova_tarefa = this.criar_nova_tarefa();
 
   //# Declara uma instancia no construtor
-  constructor(public toastController: ToastController, public alertController: AlertController) { }
+  constructor(public toastController: ToastController, public alertController: AlertController, public storage: Storage) {
+    this.storage.get('TAREFAS_KEY').then((data) => {
+      if (data) {
+
+      this.tarefas = data;
+      }
+    });
+   }
 
   async add() {
+
+
+//  if (this.nova_tarefa.descricao == ''){}
     this.tarefas.push(this.nova_tarefa);
+    this.storage.set('TAREFAS_KEY',this.tarefas);
     this.nova_tarefa = this.criar_nova_tarefa();
 
     //# Cria o toast
@@ -87,6 +70,7 @@ export class ListaTarefaPage {
             this.nova_tarefa = tarefa;
             var i = this.tarefas.indexOf(tarefa);
             this.tarefas.splice(i, 1);
+            this.storage.set('TAREFAS_KEY',this.tarefas)
             //# Cria o toast
             const toast = await this.toastController.create({
               message: 'Tarefa excluida com sucesso!',
