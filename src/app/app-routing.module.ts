@@ -8,6 +8,7 @@ const routes: Routes = [
   { path: 'lista-compra', loadChildren: './lista-compra/lista-compra.module#ListaCompraPageModule' },
   { path: 'tarefa-detail/:task', loadChildren: './tarefa-detail/tarefa-detail.module#TarefaDetailPageModule' },
   { path: 'nova-tarefa-modal', loadChildren: './nova-tarefa-modal/nova-tarefa-modal.module#NovaTarefaModalPageModule' },
+  { path: 'nova-compra-modal', loadChildren: './nova-compra-modal/nova-compra-modal.module#NovaCompraModalPageModule' },
 ];
 
 @NgModule({

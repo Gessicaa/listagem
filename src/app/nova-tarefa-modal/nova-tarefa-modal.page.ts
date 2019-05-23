@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-nova-tarefa-modal',
@@ -7,9 +8,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NovaTarefaModalPage implements OnInit {
 
-  constructor() { }
+  nova_tarefa = {
+    'descricao': '',
+    'horario': ''
+  }
+
+  constructor(public modalController: ModalController) { }
 
   ngOnInit() {
+  }
+
+  add() {
+    this.modalController.dismiss(this.nova_tarefa);
+
   }
 
 }

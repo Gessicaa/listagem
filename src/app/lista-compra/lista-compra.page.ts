@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { ToastController, AlertController } from '@ionic/angular';
+import { ToastController, AlertController, ModalController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
+import { NovaCompraModalPage } from '../nova-compra-modal/nova-compra-modal.page';
 
 @Component({
   selector: 'app-lista-compra',
@@ -13,10 +14,9 @@ export class ListaCompraPage {
   compras = [];
   COMPRAS_KEY = 'compras'
 
-  nova_compra = this.criar_nova_compra();
 
   //# Declara uma instancia no construtor
-  constructor(public toastController: ToastController, public alertController: AlertController, public storage: Storage) {
+  constructor(public toastController: ToastController, public alertController: AlertController, public storage: Storage, public modalController: ModalController) {
     this.storage.get('COMPRAS_KEY').then((data) => {
       if (data) {
 
@@ -25,10 +25,9 @@ export class ListaCompraPage {
     });
    }
 
-  async add() {
-    this.compras.push(this.nova_compra);
+  async add(compra) {
+    this.compras.push(compra);
     this.storage.set('COMPRAS_KEY',this.compras);
-    this.nova_compra = this.criar_nova_compra();
 
     //# Cria o toast
     const toast = await this.toastController.create({
@@ -63,7 +62,6 @@ export class ListaCompraPage {
         {
           text: 'Sim',
           handler: async () => {
-            this.nova_compra = compra;
             var i = this.compras.indexOf(compra);
             this.compras.splice(i, 1);
             this.storage.set('COMPRAS_KEY',this.compras)
@@ -87,12 +85,20 @@ export class ListaCompraPage {
   }
 
   editar(compra) {
-    // Atuliaza o formulario com os dados da terefa
-    this.nova_compra = compra;
-
-    // Remove o item selecionado na lista
     var i = this.compras.indexOf(compra);
     this.compras.splice(i, 1);
   }
 
+  async exibir_modal() {
+    const modal = await this.modalController.create({
+      component: NovaCompraModalPage
+    });
+
+    await modal.present();
+    
+    modal.onDidDismiss().then((retorno) => {
+      this.add(retorno.data);
+    });
+
+   }
 }

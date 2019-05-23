@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ToastController, AlertController } from '@ionic/angular';
+import { ToastController, AlertController, ModalController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
+import { NovaTarefaModalPage } from '../nova-tarefa-modal/nova-tarefa-modal.page';
 
 @Component({
   selector: 'app-lista-tarefa',
@@ -11,13 +12,11 @@ export class ListaTarefaPage {
 
   title = "Lista de tarefas";
   tarefas = [];
-
   TAREFAS_KEY = 'tarefas'
 
-  nova_tarefa = this.criar_nova_tarefa();
 
   //# Declara uma instancia no construtor
-  constructor(public toastController: ToastController, public alertController: AlertController, public storage: Storage) {
+  constructor(public toastController: ToastController, public alertController: AlertController, public storage: Storage, public modalController: ModalController) {
     this.storage.get('TAREFAS_KEY').then((data) => {
       if (data) {
 
@@ -26,13 +25,10 @@ export class ListaTarefaPage {
     });
    }
 
-  async add() {
+  async add(tarefa) {
 
-
-//  if (this.nova_tarefa.descricao == ''){}
-    this.tarefas.push(this.nova_tarefa);
+    this.tarefas.push(tarefa);
     this.storage.set('TAREFAS_KEY',this.tarefas);
-    this.nova_tarefa = this.criar_nova_tarefa();
 
     //# Cria o toast
     const toast = await this.toastController.create({
@@ -67,7 +63,6 @@ export class ListaTarefaPage {
         {
           text: 'Sim',
           handler: async () => {
-            this.nova_tarefa = tarefa;
             var i = this.tarefas.indexOf(tarefa);
             this.tarefas.splice(i, 1);
             this.storage.set('TAREFAS_KEY',this.tarefas)
@@ -91,12 +86,22 @@ export class ListaTarefaPage {
   }
 
   editar(tarefa) {
-    // Atuliaza o formulario com os dados da terefa
-    this.nova_tarefa = tarefa;
-
     // Remove o item selecionado na lista
     var i = this.tarefas.indexOf(tarefa);
     this.tarefas.splice(i, 1);
   }
+
+  async exibir_modal() {
+    const modal = await this.modalController.create({
+      component: NovaTarefaModalPage
+    });
+
+    await modal.present();
+    
+    modal.onDidDismiss().then((retorno) => {
+      this.add(retorno.data);
+    });
+
+   }
 
 }
