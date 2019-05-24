@@ -1,37 +1,44 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ToastController, AlertController, ModalController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
-import { NovaCompraModalPage } from '../nova-compra-modal/nova-compra-modal.page';
+import { NovoAlunoModalPage } from '../novo-aluno-modal/novo-aluno-modal.page';
 
 @Component({
-  selector: 'app-lista-compra',
-  templateUrl: './lista-compra.page.html',
-  styleUrls: ['./lista-compra.page.scss'],
+  selector: 'app-lista-aluno',
+  templateUrl: './lista-aluno.page.html',
+  styleUrls: ['./lista-aluno.page.scss'],
 })
-export class ListaCompraPage {
+export class ListaAlunoPage {
 
-  title = "Lista de compras";
-  compras = [];
-  COMPRAS_KEY = 'compras'
+  title = "Lista de alunos";
+  alunos = [
+    {
+      "nome": "",
+      "descricao": "",
+      "imagem": "",
+      "likes": ""
+    }
+  ];
+  ALUNOS_KEY = 'alunos'
 
-
-  //# Declara uma instancia no construtor
   constructor(public toastController: ToastController, public alertController: AlertController, public storage: Storage, public modalController: ModalController) {
-    this.storage.get('COMPRAS_KEY').then((data) => {
+    this.storage.get('ALUNOS_KEY').then((data) => {
       if (data) {
 
-      this.compras = data;
+      this.alunos = data;
       }
     });
    }
 
-  async add(compra) {
-    this.compras.push(compra);
-    this.storage.set('COMPRAS_KEY',this.compras);
+
+   async add(aluno) {
+
+    this.alunos.push(aluno);
+    this.storage.set('ALUNOS_KEY',this.alunos);
 
     //# Cria o toast
     const toast = await this.toastController.create({
-      message: 'Nova compra cadastrada com sucesso!',
+      message: 'Novo aluno cadastrado com sucesso!',
       duration: 5000,
       position: 'top'
     });
@@ -40,18 +47,20 @@ export class ListaCompraPage {
     toast.present();
   }
 
-  criar_nova_compra() {
+  criar_nova_aluno() {
     return {
-      "produto": "",
-      "preco": ""
+      "nome": "",
+      "perfil": "",
+      "imagem": "",
+      "likes": ""
     }
   }
 
-  async excluir(compra) {
+  async excluir(aluno) {
 
     const alert = await this.alertController.create({
       header: 'Confirmação',
-      message: 'Deseja excluir a compra?',
+      message: 'Deseja excluir o aluno?',
       buttons: [
         {
           text: 'Não',
@@ -62,12 +71,12 @@ export class ListaCompraPage {
         {
           text: 'Sim',
           handler: async () => {
-            var i = this.compras.indexOf(compra);
-            this.compras.splice(i, 1);
-            this.storage.set('COMPRAS_KEY',this.compras)
+            var i = this.alunos.indexOf(aluno);
+            this.alunos.splice(i, 1);
+            this.storage.set('ALUNOS_KEY',this.alunos)
             //# Cria o toast
             const toast = await this.toastController.create({
-              message: 'Compra excluida com sucesso!',
+              message: 'Aluno excluido com sucesso!',
               duration: 5000,
               position: 'top'
             });
@@ -84,14 +93,15 @@ export class ListaCompraPage {
     await alert.present();
   }
 
-  editar(compra) {
-    var i = this.compras.indexOf(compra);
-    this.compras.splice(i, 1);
+  editar(aluno) {
+    // Remove o item selecionado na lista
+    var i = this.alunos.indexOf(aluno);
+    this.alunos.splice(i, 1);
   }
 
   async exibir_modal() {
     const modal = await this.modalController.create({
-      component: NovaCompraModalPage
+      component: NovoAlunoModalPage
     });
 
     await modal.present();

@@ -10,7 +10,7 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { IonicStorageModule } from '@ionic/storage';
 import { NovaTarefaModalPageModule } from './nova-tarefa-modal/nova-tarefa-modal.module';
-import { NovaCompraModalPageModule } from './nova-compra-modal/nova-compra-modal.module';
+import { NovoAlunoModalPageModule } from './novo-aluno-modal/novo-aluno-modal.module';
 
 
 @NgModule({
@@ -22,7 +22,7 @@ import { NovaCompraModalPageModule } from './nova-compra-modal/nova-compra-modal
     AppRoutingModule,
     IonicStorageModule.forRoot(),
     NovaTarefaModalPageModule,
-    NovaCompraModalPageModule
+    NovoAlunoModalPageModule
   ],
   providers: [
     StatusBar,

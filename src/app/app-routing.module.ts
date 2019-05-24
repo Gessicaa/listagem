@@ -5,10 +5,10 @@ const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'home', loadChildren: './home/home.module#HomePageModule' },
   { path: 'lista-tarefa', loadChildren: './lista-tarefa/lista-tarefa.module#ListaTarefaPageModule' },
-  { path: 'lista-compra', loadChildren: './lista-compra/lista-compra.module#ListaCompraPageModule' },
   { path: 'tarefa-detail/:task', loadChildren: './tarefa-detail/tarefa-detail.module#TarefaDetailPageModule' },
   { path: 'nova-tarefa-modal', loadChildren: './nova-tarefa-modal/nova-tarefa-modal.module#NovaTarefaModalPageModule' },
-  { path: 'nova-compra-modal', loadChildren: './nova-compra-modal/nova-compra-modal.module#NovaCompraModalPageModule' },
+  { path: 'lista-aluno', loadChildren: './lista-aluno/lista-aluno.module#ListaAlunoPageModule' },
+  { path: 'novo-aluno-modal', loadChildren: './novo-aluno-modal/novo-aluno-modal.module#NovoAlunoModalPageModule' },
 ];
 
 @NgModule({
